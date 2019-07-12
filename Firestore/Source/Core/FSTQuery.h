@@ -16,13 +16,17 @@
 
 #import <Foundation/Foundation.h>
 
+#include <memory>
+#include <string>
+#include <vector>
+
 #include "Firestore/core/src/firebase/firestore/core/filter.h"
 #include "Firestore/core/src/firebase/firestore/model/document_set.h"
 #include "Firestore/core/src/firebase/firestore/model/field_path.h"
+#include "Firestore/core/src/firebase/firestore/model/field_value.h"
 #include "Firestore/core/src/firebase/firestore/model/resource_path.h"
 
 @class FSTDocument;
-@class FSTFieldValue;
 
 namespace core = firebase::firestore::core;
 namespace model = firebase::firestore::model;
@@ -43,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)filterWithField:(const model::FieldPath &)field
                  filterOperator:(core::Filter::Operator)op
-                          value:(FSTFieldValue *)value;
+                          value:(model::FieldValue)value;
 
 /** Returns the field the Filter operates over. Abstract method. */
 - (const model::FieldPath &)field;
@@ -72,7 +76,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (instancetype)initWithField:(model::FieldPath)field
                filterOperator:(core::Filter::Operator)filterOperator
-                        value:(FSTFieldValue *)value;
+                        value:(model::FieldValue)value;
 
 - (instancetype)init NS_UNAVAILABLE;
 
@@ -86,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign, readonly) core::Filter::Operator filterOperator;
 
 /** The right hand side of the relation. A constant value to compare to. */
-@property(nonatomic, strong, readonly) FSTFieldValue *value;
+@property(nonatomic, assign, readonly) const model::FieldValue &value;
 
 @end
 
@@ -142,16 +146,16 @@ NS_ASSUME_NONNULL_BEGIN
  * @param position The position relative to the sort order.
  * @param isBefore Whether this bound is just before or just after the position.
  */
-+ (instancetype)boundWithPosition:(NSArray<FSTFieldValue *> *)position isBefore:(BOOL)isBefore;
++ (instancetype)boundWithPosition:(std::vector<model::FieldValue>)position isBefore:(bool)isBefore;
 
 /** Whether this bound is just before or just after the provided position */
-@property(nonatomic, assign, readonly, getter=isBefore) BOOL before;
+@property(nonatomic, assign, readonly, getter=isBefore) bool before;
 
 /** The index position of this bound represented as an array of field values. */
-@property(nonatomic, strong, readonly) NSArray<FSTFieldValue *> *position;
+@property(nonatomic, assign, readonly) const std::vector<model::FieldValue> &position;
 
-/** Returns YES if a document comes before a bound using the provided sort order. */
-- (BOOL)sortsBeforeDocument:(FSTDocument *)document
+/** Returns true if a document comes before a bound using the provided sort order. */
+- (bool)sortsBeforeDocument:(FSTDocument *)document
              usingSortOrder:(NSArray<FSTSortOrder *> *)sortOrder;
 
 @end
@@ -165,10 +169,10 @@ NS_ASSUME_NONNULL_BEGIN
  * Initializes a query with all of its components directly.
  */
 - (instancetype)initWithPath:(model::ResourcePath)path
-             collectionGroup:(nullable NSString *)collectionGroup
+             collectionGroup:(std::shared_ptr<const std::string>)collectionGroup
                     filterBy:(NSArray<FSTFilter *> *)filters
                      orderBy:(NSArray<FSTSortOrder *> *)sortOrders
-                       limit:(NSInteger)limit
+                       limit:(int32_t)limit
                      startAt:(nullable FSTBound *)startAtBound
                        endAt:(nullable FSTBound *)endAtBound NS_DESIGNATED_INITIALIZER;
 
@@ -185,12 +189,12 @@ NS_ASSUME_NONNULL_BEGIN
  *
  * @param path The path to the location to be queried over. Must currently be
  *     empty in the case of a collection group query.
- * @param collectionGroup The collection group to be queried over. nil if this
+ * @param collectionGroup The collection group to be queried over. nullptr if this
  *     is not a collection group query.
  * @return A new instance of FSTQuery.
  */
 + (instancetype)queryWithPath:(model::ResourcePath)path
-              collectionGroup:(nullable NSString *)collectionGroup;
+              collectionGroup:(std::shared_ptr<const std::string>)collectionGroup;
 
 /**
  * Returns the list of ordering constraints that were explicitly requested on the query by the
@@ -230,7 +234,7 @@ NS_ASSUME_NONNULL_BEGIN
  * @param limit The maximum number of results to return. If @a limit <= 0, behavior is unspecified.
  *     If @a limit == NSNotFound, then no limit is applied.
  */
-- (instancetype)queryBySettingLimit:(NSInteger)limit;
+- (instancetype)queryBySettingLimit:(int32_t)limit;
 
 /**
  * Creates a new FSTQuery starting at the provided bound.
@@ -281,13 +285,13 @@ NS_ASSUME_NONNULL_BEGIN
 - (const model::ResourcePath &)path;
 
 /** The collection group of the query. */
-@property(nonatomic, nullable, strong, readonly) NSString *collectionGroup;
+- (const std::shared_ptr<const std::string> &)collectionGroup;
 
 /** The filters on the documents returned by the query. */
 @property(nonatomic, strong, readonly) NSArray<FSTFilter *> *filters;
 
 /** The maximum number of results to return, or NSNotFound if no limit. */
-@property(nonatomic, assign, readonly) NSInteger limit;
+@property(nonatomic, assign, readonly) int32_t limit;
 
 /**
  * A canonical string identifying the query. Two different instances of equivalent queries will

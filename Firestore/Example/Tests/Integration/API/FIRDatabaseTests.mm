@@ -147,8 +147,6 @@ using firebase::firestore::util::TimerId;
 }
 
 - (void)testCanMergeDataWithAnExistingDocumentUsingSet {
-  if ([FSTIntegrationTestCase isRunningAgainstEmulator]) return;  // b/112104025
-
   FIRDocumentReference *doc = [[self.db collectionWithPath:@"rooms"] documentWithAutoID];
 
   NSDictionary<NSString *, id> *initialData =
@@ -1039,8 +1037,6 @@ using firebase::firestore::util::TimerId;
 }
 
 - (void)testUpdateFieldsWithDots {
-  if ([FSTIntegrationTestCase isRunningAgainstEmulator]) return;  // b/112104025
-
   FIRDocumentReference *doc = [self documentRef];
 
   [self writeDocumentRef:doc data:@{@"a.b" : @"old", @"c.d" : @"old"}];
@@ -1190,7 +1186,7 @@ using firebase::firestore::util::TimerId;
   FIRFirestore *firestore = doc.firestore;
 
   [self writeDocumentRef:doc data:@{@"foo" : @"bar"}];
-  [self queueForFirestore:firestore] -> RunScheduledOperationsUntil(TimerId::WriteStreamIdle);
+  [firestore workerQueue] -> RunScheduledOperationsUntil(TimerId::WriteStreamIdle);
   [self writeDocumentRef:doc data:@{@"foo" : @"bar"}];
 }
 
@@ -1199,7 +1195,7 @@ using firebase::firestore::util::TimerId;
   FIRFirestore *firestore = doc.firestore;
 
   [self readSnapshotForRef:[self documentRef] requireOnline:YES];
-  [self queueForFirestore:firestore] -> RunScheduledOperationsUntil(TimerId::ListenStreamIdle);
+  [firestore workerQueue] -> RunScheduledOperationsUntil(TimerId::ListenStreamIdle);
   [self readSnapshotForRef:[self documentRef] requireOnline:YES];
 }
 

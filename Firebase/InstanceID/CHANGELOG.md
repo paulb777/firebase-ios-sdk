@@ -1,3 +1,13 @@
+# 2019-07 -- 4.2.1
+- Fixed an issue where fetching an instance ID wouldn't invoke the callback handler if the instance ID had not changed. (#3229)
+
+# 2019-06-18 -- 4.2.0
+- Added macOS support for InstanceID (#2880)
+- Corrected timezone proto key (#3132)
+
+# 2019-06-04 -- 4.1.1
+- Fixed a crash in token fetching. Removed debug assertion that is only for develop build. (#3018)
+
 # 2019-05-21 -- 4.1.0
 - Fixed a race condition where checkin was deleted before writing during app start, causing notifications to not be delivered correctly. (#2438)
 - Fixed a keychain migration crash. (#2731)

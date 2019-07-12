@@ -163,6 +163,7 @@ cc_test(
     string_format_test.cc
     string_util_test.cc
     string_win_test.cc
+    vector_of_ptr_test.cc
   DEPENDS
     absl_base
     absl_strings
@@ -196,7 +197,7 @@ cc_library(
 cc_binary(
   firebase_firestore_util_ordered_code_benchmark
   SOURCES
-    ordered_code_benchmark.mm
+    ordered_code_benchmark.cc
   DEPENDS
     benchmark
     benchmark_main

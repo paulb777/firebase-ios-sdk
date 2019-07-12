@@ -1,10 +1,8 @@
 # Uncomment the next two lines for pre-release testing on internal repo
 #source 'sso://cpdc-internal/firebase'
-#source 'https://github.com/CocoaPods/Specs.git'
+#source 'https://cdn.cocoapods.org/'
 
-# Uncomment the next two lines for pre-release testing on public repo
-source 'https://github.com/Firebase/SpecsStaging.git'
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 
 use_frameworks!
 
@@ -19,7 +17,7 @@ target 'Core_Example_iOS' do
   # The next line is the forcing function for the Firebase pod. The Firebase
   # version's subspecs should depend on the component versions in the
   # corresponding podspec's in this repo.
-  pod 'Firebase/CoreOnly', '6.1.0'
+  pod 'Firebase/CoreOnly', '6.4.0'
 
   target 'Core_Tests_iOS' do
     inherit! :search_paths
