@@ -3,4 +3,6 @@ osx_instance:
 
 task:
   script: echo "Hello World from macOS!"
+
+task:
   script: pod --version
