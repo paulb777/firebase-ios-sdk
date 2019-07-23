@@ -4,4 +4,4 @@ echo "Hello Paul"
 pod --version
 bundle install
 pod --version
-./scripts/pod_lib_lint.rb --verbose FirebaseCore.podspec
+./scripts/pod_lib_lint.rb FirebaseCore.podspec --verbose
