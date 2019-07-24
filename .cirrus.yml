@@ -2,7 +2,9 @@ osx_instance:
   image: mojave-xcode-10.1
 
 task:
-  script: ./cirrus.sh
+  script: 
+    - ./cirrus.sh
+    - ./cirrus3.sh
 
 two_task:
   script: ./cirrus2.sh
