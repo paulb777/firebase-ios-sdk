@@ -3,3 +3,7 @@ osx_instance:
 
 task:
   script: ./cirrus.sh
+  script: ./cirrus3.sh
+
+task:
+  script: ./cirrus2.sh
