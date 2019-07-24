@@ -5,5 +5,5 @@ task:
   script: ./cirrus.sh
   script: ./cirrus3.sh
 
-task:
+two_task:
   script: ./cirrus2.sh
