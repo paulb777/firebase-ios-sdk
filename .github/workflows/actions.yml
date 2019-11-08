@@ -9,9 +9,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a one-line script
-      run: ./scripts/pod_lib_lint.rb FirebaseCore.podspec --platforms=ios
     - name: Run a multi-line script
       run: |
         pod --version
-        echo test, and deploy your project.
+        bundle install
+        bundle exec pod --version
+    - name: Run a one-line script
+      run: ./scripts/pod_lib_lint.rb FirebaseCore.podspec --platforms=ios
+
