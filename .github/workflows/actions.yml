@@ -3,10 +3,25 @@ name: CI
 on: [push]
 
 jobs:
-  build:
-
+  check:
     runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up
+      run: |
+        bundle install
+        bundle exec pod --version
+    - name: FirebaseCore
+      run: |
+        brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/e3496d9/Formula/clang-format.rb
+        brew install https://raw.githubusercontent.com/Homebrew/homebrew-core/7963c3d/Formula/swiftformat.rb
+        pip install flake8
+        ./scripts/check.sh --test-only
 
+jobs:
+  core:
+    needs: check
+    runs-on: macOS-latest
     steps:
     - uses: actions/checkout@v1
     - name: Set up
@@ -16,3 +31,15 @@ jobs:
     - name: FirebaseCore
       run: ./scripts/pod_lib_lint.rb FirebaseCore.podspec --platforms=ios
 
+jobs:
+  storage:
+    needs: check
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up
+      run: |
+        bundle install
+        bundle exec pod --version
+    - name: FirebaseStorage
+      run: ./scripts/pod_lib_lint.rb FirebaseStorage.podspec --platforms=ios
