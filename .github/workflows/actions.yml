@@ -18,7 +18,6 @@ jobs:
         pip install flake8
         ./scripts/check.sh --test-only
 
-jobs:
   core:
     needs: check
     runs-on: macOS-latest
@@ -31,7 +30,6 @@ jobs:
     - name: FirebaseCore
       run: ./scripts/pod_lib_lint.rb FirebaseCore.podspec --platforms=ios
 
-jobs:
   storage:
     needs: check
     runs-on: macOS-latest
