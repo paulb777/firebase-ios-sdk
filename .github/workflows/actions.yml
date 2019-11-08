@@ -9,11 +9,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Run a multi-line script
+    - name: Set up
       run: |
-        pod --version
         bundle install
         bundle exec pod --version
-    - name: Run a one-line script
+    - name: FirebaseCore
       run: ./scripts/pod_lib_lint.rb FirebaseCore.podspec --platforms=ios
 
